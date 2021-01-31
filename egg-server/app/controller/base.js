@@ -1,3 +1,5 @@
+'use strict';
+
 const { Controller } = require('egg');
 
 class BaseController extends Controller {
@@ -5,14 +7,14 @@ class BaseController extends Controller {
   success(data) {
     this.ctx.body = {
       code: 0,
-      data
+      data,
     };
   }
 
   message(message) {
     this.ctx.body = {
       code: 0,
-      message
+      message,
     };
   }
 
@@ -20,7 +22,7 @@ class BaseController extends Controller {
     this.ctx.body = {
       code,
       message,
-      errors
+      errors,
     };
   }
 }
