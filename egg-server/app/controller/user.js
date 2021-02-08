@@ -2,6 +2,7 @@
 
 const BaseController = require('./base');
 const md5 = require('md5');
+const jwt = require('jsonwebtoken');
 
 const HashSalt = 'testabc123';
 
@@ -26,7 +27,7 @@ class UserController extends BaseController {
   }
 
   async login() {
-    const { ctx } = this;
+    const { ctx, app } = this;
     const { email, password } = ctx.request.body;
     if (!this.checkCaptcha()) return;
     const user = await ctx.model.User.findOne({
@@ -36,7 +37,14 @@ class UserController extends BaseController {
     if (!user) {
       return this.error('用户名或者密码错误');
     }
+    const token = jwt.sign({
+      _id: user._id,
+      email
+    }, app.config.jwt.secret, {
+      expiresIn: '1h'
+    });
     return this.success({
+      token,
       email,
       nickname: user.nickname,
     });
