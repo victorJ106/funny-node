@@ -1,12 +1,14 @@
+'use strict';
+
 const jwt = require('jsonwebtoken');
 
 module.exports = ({ app }) => {
-  return async function (ctx, next) {
+  return async function(ctx, next) {
     const authorization = ctx.request.header.authorization;
     if (!authorization) {
       ctx.body = {
         code: -2,
-        message: '用户没有登录'
+        message: '用户没有登录',
       };
       return;
     }
@@ -16,8 +18,8 @@ module.exports = ({ app }) => {
       ctx.state.email = res.email;
       ctx.state.userId = res._id;
       await next();
-    } catch(err)  {
+    } catch (err) {
       console.log(err);
     }
-  }
-}
+  };
+};

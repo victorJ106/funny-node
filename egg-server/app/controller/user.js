@@ -39,9 +39,9 @@ class UserController extends BaseController {
     }
     const token = jwt.sign({
       _id: user._id,
-      email
+      email,
     }, app.config.jwt.secret, {
-      expiresIn: '1h'
+      expiresIn: '1h',
     });
     return this.success({
       token,
