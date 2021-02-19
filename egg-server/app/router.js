@@ -10,7 +10,8 @@ module.exports = app => {
 
   router.get('/captcha', controller.common.captcha);
   router.get('/sendMailCode', controller.common.sendMailCode);
-
+  router.post('/uploadFile', controller.common.uploadFile);
+  router.post('/mergeFile', controller.common.mergeFile);
 
   router.group({ name: 'user', prefix: '/user' }, router => {
     const { login, register } = controller.user;

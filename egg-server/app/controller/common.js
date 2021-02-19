@@ -2,9 +2,32 @@
 
 const BaseController = require('./base');
 const svgCaptcha = require('svg-captcha');
-// const fse = require('fs-extra');
+const fse = require('fs-extra');
+const path = require('path');
 
 module.exports = class CommonController extends BaseController {
+
+  async uploadFile() {
+    const { ctx } = this;
+    const file = ctx.request.files[0];
+    const { hash, name } = ctx.request.body;
+    const chunkPath = path.resolve(this.config.UPLOAD_DIR, hash);
+    if (!fse.existsSync(chunkPath)) {
+      fse.mkdirSync(chunkPath);
+    }
+
+    fse.moveSync(file.filepath, chunkPath + '/' + name);
+    // this.message('上传成功');
+    this.success('上传成功');
+  }
+
+  async mergeFile() {
+    const { ctx } = this;
+    const { type, size, hash } = ctx.request.body;
+    const filePath = path.resolve(this.config.UPLOAD_DIR, `${hash}.${type}`);
+    await ctx.service.tools.mergeFile(filePath, hash, size);
+    this.success({ url: `public/${hash}.${type}` });
+  }
 
   async captcha() {
     console.log('captcha============');
