@@ -29,6 +29,28 @@ module.exports = class CommonController extends BaseController {
     this.success({ url: `public/${hash}.${type}` });
   }
 
+  async checkFile() {
+    const { ctx } = this;
+    const { hash, type } = ctx.request.body;
+    const filePath = path.resolve(this.config.UPLOAD_DIR, `${hash}.${type}`);
+
+    let uploaded = false;
+    let uploadedList = [];
+    if (fse.existsSync(filePath)) {
+      uploaded = true;
+    } else {
+      uploadedList = await this.getUploadedList(path.resolve(this.config.UPLOAD_DIR, hash));
+    }
+    this.success({
+      uploaded,
+      uploadedList,
+    });
+  }
+
+  async getUploadedList(dirPath) {
+    return fse.existsSync(dirPath) ? fse.readdirSync(dirPath) : [];
+  }
+
   async captcha() {
     console.log('captcha============');
     const captcha = svgCaptcha.create({

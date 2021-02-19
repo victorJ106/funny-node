@@ -12,6 +12,7 @@ module.exports = app => {
   router.get('/sendMailCode', controller.common.sendMailCode);
   router.post('/uploadFile', controller.common.uploadFile);
   router.post('/mergeFile', controller.common.mergeFile);
+  router.post('/checkFile', controller.common.checkFile);
 
   router.group({ name: 'user', prefix: '/user' }, router => {
     const { login, register } = controller.user;
