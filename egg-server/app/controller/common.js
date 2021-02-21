@@ -9,7 +9,8 @@ module.exports = class CommonController extends BaseController {
 
   async uploadFile() {
     if (Math.random() < 0.3) {
-      return this.ctx.status = 500;
+      this.ctx.status = 500;
+      return;
     }
     const { ctx } = this;
     const file = ctx.request.files[0];
